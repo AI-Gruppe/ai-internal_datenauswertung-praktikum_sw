@@ -5,6 +5,7 @@ import sys
 import logging
 import numpy as np
 import pandas as pd
+import IPython.display as ipd
 
 import librosa
 import librosa.display
@@ -241,6 +242,17 @@ fig, ax = plt.subplots()
 img = librosa.display.specshow(S_db, x_axis='time', y_axis='linear', ax=ax)
 ax.set(title='Spectrogram without noise')
 fig.colorbar(img, ax=ax, format="%+2.f dB")
+
+# %% 
+ipd.Audio(y, rate=fs)
+
+# %% Pandas Dataframe
+rms_df = pd.DataFrame(columns=['RMS', 'Frequency', 'Amplitude'])
+
+rms_df['RMS'] = rms
+rms_df['Frequency'] = frequency
+rms_df['Amplitude'] = amplitude
+
 
 # %% [markdown]
 # ## Image Data
