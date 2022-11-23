@@ -68,7 +68,7 @@ elif isnotebook():
         get_ipython().run_line_magic('matplotlib', 'widget')
     except ModuleNotFoundError:
         get_ipython().run_line_magic('matplotlib', 'inline')
-
+    get_ipython().run_line_magic('matplotlib', 'inline')
 # Return used Matplotlib backend
 logger.info(f"Matplotlib backend: {matplotlib.get_backend()}")
 
@@ -83,9 +83,9 @@ fs = 1e3
 length = 1 # in seconds
 time = np.arange(0, length, 1 / fs)
 
-theta = 0
-frequency = 10
-amplitude = 1
+theta = 1.5
+frequency = 5
+amplitude = 5
 sinewave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
 
 plt.figure()
@@ -126,17 +126,22 @@ amplitude = 0.5
 frequency = 20
 sinewave += amplitude * np.sin(2 * np.pi * 2 * frequency * time + theta)
 
+# Third sine wave
+amplitude = 2
+frequency = 50
+sinewave += amplitude * np.sin(2 * np.pi * 2 * frequency * time + theta)
+
 # Noise
-amplitude = 0.1 # TODO Change to 1
+amplitude = 0.2# TODO Change to 1
 noise = amplitude * np.random.randn(len(sinewave))
 sinewave_noise = sinewave + noise
 
 # Frequency response
 freq, fft = DSP.power_fft(sinewave_noise, fs)
 
-# %% Plot the result als subplots
+# %% Plot the result as subplots
 fig, axs = plt.subplots(2, 1, figsize=(8, 4))
-axs[0].plot(time, sinewave_noise)
+axs[0].plot(time, sinewave)
 axs[0].set_title('Time signal')
 axs[1].plot(freq, fft)
 axs[1].set_title('Frequency spectrum')
@@ -146,16 +151,16 @@ plt.tight_layout()
 # ## Spectrogram
 
 # %% Spectrogram without noise
-D = librosa.stft(sinewave, hop_length=256, n_fft=1024)  # High resolution STFT
+D = librosa.stft(sinewave, hop_length=64, n_fft=1024)  # High resolution STFT
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-
+# S_db = np.abs(D)
 fig, ax = plt.subplots()
 img = librosa.display.specshow(S_db, x_axis='time', y_axis='linear', ax=ax)
 ax.set(title='Spectrogram without noise')
 fig.colorbar(img, ax=ax, format="%+2.f dB")
 
 # %% Spectrogram with noise
-D = librosa.stft(sinewave_noise, hop_length=256, n_fft=1024)  # High resolution STFT
+D = librosa.stft(sinewave_noise, hop_length=64, n_fft=1024)  # High resolution STFT
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
 
 fig, ax = plt.subplots()
@@ -171,22 +176,24 @@ time = np.arange(0, length, 1 / fs)
 
 # First sine wave
 theta = 0
-frequency = 10
+frequency = 50
 amplitude = 1
 sinewaves = amplitude * np.sin(2 * np.pi * frequency * time + theta)
 
 frequency = 2*frequency
+amplitude = 2
 new_wave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
 sinewaves = np.concatenate((sinewaves, new_wave), axis=0)
 
 frequency = 2*frequency
+amplitude = 4
 new_wave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
 sinewaves = np.concatenate((sinewaves, new_wave), axis=0)
 
 # %% Spectrogram with noise
 D = librosa.stft(sinewaves, hop_length=256, n_fft=1024)  # High resolution STFT
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-
+S_db = np.abs(D)
 fig, ax = plt.subplots()
 img = librosa.display.specshow(S_db, x_axis='time', y_axis='linear', ax=ax)
 ax.set(title='Spectrogram without noise')
@@ -219,7 +226,7 @@ amplitude = 1
 for i in range (0, 100):
     sinewave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
     rms.append(DSP.rms(sinewave))
-    amplitude += 0.1 * np.random.randn()
+    amplitude += 0.5 * np.random.randn()
 
 plt.figure()
 plt.plot(rms)
@@ -231,8 +238,8 @@ plt.show()
 # %% [markdown]
 # ## Audio Data
 audio_path = os.path.abspath('../data/2022-10-23T17_22_44.027Z_rain.wav')
-# y, sr = librosa.load(librosa.ex('trumpet'))
-y, fs = librosa.load(audio_path)
+y, sr = librosa.load(librosa.ex('trumpet'))
+# y, fs = librosa.load(audio_path)
 
 D = librosa.stft(y, hop_length=256, n_fft=1024)  # High resolution STFT
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
@@ -243,4 +250,7 @@ ax.set(title='Spectrogram without noise')
 fig.colorbar(img, ax=ax, format="%+2.f dB")
 
 # %% [markdown]
-# ## Image Data
+# ## Audio Data Listening example
+# %%
+import IPython.display as ipd
+ipd.Audio(y, rate = sr)
