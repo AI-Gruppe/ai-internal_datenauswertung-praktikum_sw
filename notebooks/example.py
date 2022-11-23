@@ -249,9 +249,27 @@ ipd.Audio(y, rate=fs)
 # %% Pandas Dataframe
 rms_df = pd.DataFrame(columns=['RMS', 'Frequency', 'Amplitude'])
 
-rms_df['RMS'] = rms
-rms_df['Frequency'] = frequency
-rms_df['Amplitude'] = amplitude
+# rms_df['RMS'] = rms
+rms_df['Frequency'] = None
+rms_df['Time'] = list(range(0, len(y)))
+rms_df['Amplitude'] = y
+
+# %% [markdown]
+# ## Verteilungsdichtefunktion (PDF)
+import seaborn as sns
+
+rms_array = np.squeeze(rms_df['Amplitude'])
+median_value = np.median(rms_array)
+
+fig, ax = plt.subplots()
+ax = sns.histplot(rms_df['Amplitude'], kde=True, ax=ax)
+
+plt.show()
+
+# %% Boxplot
+fig, ax = plt.subplots()
+ax = sns.boxplot(x=rms_df['Amplitude'], ax=ax)
+plt.show()
 
 
 # %% [markdown]
