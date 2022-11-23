@@ -195,6 +195,9 @@ fig.colorbar(img, ax=ax, format="%+2.f dB")
 # %% [markdown]
 # ## Example Analysis
 # ### RMS
+# $$x_{\mathrm{RMS}} = \sqrt{\frac{1}{n} \sum_{i=1}^n{x_i^2}}$$
+
+# %% RMS
 rms_clean = DSP.rms(sinewave)
 rms_noise = DSP.rms(noise)
 rms_combined = DSP.rms(sinewave_noise)
