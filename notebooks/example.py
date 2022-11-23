@@ -56,6 +56,8 @@ from anAIlysis import signal_processing as DSP
 from anAIlysis import get_samplerate as GSR
 from anAIlysis import file_handler as fh
 
+np.random.seed(seed=42)
+
 # %% Init plotting
 # Use WebAgg if no display is connected (e.g. ssh) and not running as notebook
 import matplotlib
@@ -200,6 +202,28 @@ rms_combined = DSP.rms(sinewave_noise)
 logger.info("RMS clean: {:.2f}".format(rms_clean))
 logger.info("RMS noise: {:.2f}".format(rms_noise))
 logger.info("RMS combined: {:.2f}".format(rms_combined))
+
+# %% [markdown]
+# ## Trend Analysis
+
+# %% Trend analysis
+rms = []
+
+theta = 0
+frequency = 10
+amplitude = 1
+
+for i in range (0, 100):
+    sinewave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
+    rms.append(DSP.rms(sinewave))
+    amplitude += 0.1 * np.random.randn()
+
+plt.figure()
+plt.plot(rms)
+plt.title('RMS Trend Analysis')
+plt.xlabel('Time')
+plt.ylabel('Amplitude = RMS(time)')
+plt.show()
 
 # %% [markdown]
 # ## Audio Data
