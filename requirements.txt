@@ -8,6 +8,9 @@ pylint
 tqdm
 
 coloredlogs
+ipython
+ipykernel
+ipywidgets 
 jupyter
 notebook
 nodejs
@@ -15,6 +18,7 @@ nbdime
 jupyterlab 
 ipympl
 PyQt5
+ffmpeg-python
 
 sounddevice
 librosa
@@ -27,4 +31,4 @@ openpyxl
 -e git+ssh://git@github.com/AI-Gruppe/ai_general_dataparserlib-sw.git#egg=dataparsing
 -e git+ssh://git@github.com/tabeatheunicorn/general_pythondebugging.git#egg=generichelpermodule
 -e git+ssh://git@github.com/AI-Gruppe/ai_convinAIent-dataprocessing_sw.git#egg=convinAIent
--e git+ssh://git@github.com/AI-Gruppe/ai_internal_anAIlysis-rg_sw.git#egg=anAIlysis
+-e git+ssh://git@github.com/AI-Gruppe/ai_internal_anAIlysis-rg_sw.git@rg/dev#egg=anAIlysis

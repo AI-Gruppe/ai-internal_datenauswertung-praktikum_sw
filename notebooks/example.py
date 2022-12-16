@@ -274,3 +274,46 @@ plt.show()
 
 # %% [markdown]
 # ## Image Data
+
+# %% Animation
+from IPython.display import HTML
+from matplotlib.animation import PillowWriter
+
+fs = 1e3
+length = 1 # in seconds
+time = np.arange(0, length, 1 / fs)
+
+theta = 0
+frequency = 1
+amplitude = 1
+sinewave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
+
+fig, ax = plt.subplots()
+ax.plot(time, sinewave)
+ax.set_title('Sine wave')
+ax.set_xlabel('Time')
+ax.set_ylabel('Amplitude = sin(time)')
+
+def animate(i):
+    global frequency
+
+    theta = 0
+    frequency += i
+    amplitude = 1
+
+    sinewave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
+
+    ax.get_lines()[0].set_data(time, sinewave)
+
+    ax.set_title(f"Frequency: {frequency} Hz")
+
+    return ax.get_lines()[0]
+
+length_animation = 10
+ani = matplotlib.animation.FuncAnimation(fig, animate, frames=range(length_animation), repeat=False )
+
+HTML(ani.to_html5_video())
+
+LOG_FOLDER = os.path.abspath('./logs')
+os.makedirs(LOG_FOLDER, exist_ok=True)
+ani.save(f"{LOG_FOLDER}/polar.gif", writer='pillow')

@@ -2,9 +2,11 @@
 
 ## Install
 ```bash
-sudo apt-get install lzma
-sudo apt-get install liblzma-dev
-sudo apt-get install libbz2-dev
+sudo apt install lzma
+sudo apt install liblzma-dev
+sudo apt install libbz2-dev
+sudo apt install ffmpeg
+
 python3.10 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
