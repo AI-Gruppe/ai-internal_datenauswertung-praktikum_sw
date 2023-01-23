@@ -184,6 +184,7 @@ frequency = 2*frequency
 new_wave = amplitude * np.sin(2 * np.pi * frequency * time + theta)
 sinewaves = np.concatenate((sinewaves, new_wave), axis=0)
 
+
 # %% Spectrogram with noise
 D = librosa.stft(sinewaves, hop_length=256, n_fft=1024)  # High resolution STFT
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
@@ -192,6 +193,24 @@ fig, ax = plt.subplots()
 img = librosa.display.specshow(S_db, x_axis='time', y_axis='linear', ax=ax)
 ax.set(title='Spectrogram without noise')
 fig.colorbar(img, ax=ax, format="%+2.f dB")
+
+# %% [markdown]
+# ## Cepstrum
+
+xlim=(0,1)
+ylim=(0,1e3)
+signal = sinewaves
+
+signal = signal - np.mean(signal)
+
+fig, ax = plt.subplots()
+quefrency, ceps = DSP.complex_cepstrum(signal, fs=fs)
+ax.plot(quefrency, np.abs(ceps))
+ax.set_xlabel('Quefrenz [Hz]')
+ax.set_ylabel(r'Amplitude')
+ax.set_xlim(xlim)
+ax.set_ylim(ylim)
+ax.set_title(f"Cepstrum")
 
 # %% [markdown]
 # ## Example Analysis
@@ -273,7 +292,7 @@ plt.show()
 
 
 # %% [markdown]
-# ## Image Data
+# ## Animations
 
 # %% Animation
 from IPython.display import HTML
