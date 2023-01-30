@@ -124,7 +124,7 @@ for i in range(3):
     df_cal = df_cal[(df_cal.index > t_start) & (df_cal.index < t_end)]
     u_rms = DSP.rms(df_cal[f"U_{i+1}"])
     i_rms = DSP.rms(df_cal[f"I_{i+1}"])
-    print(f"Phase {phase_description[i]}: U_rms = {u_rms:.2f} V, I_rms = {i_rms:.2f} A")
+    logger.info(f"Phase {phase_description[i]}: U_rms = {u_rms:.2f} V, I_rms = {i_rms:.2f} A")
 
 
 # %% Plot

@@ -53,7 +53,7 @@ from dataparsing import parsing_functions
 from anAIlysis import ESA
 from anAIlysis import signal_processing as DSP
 # from anAIlysis import plotting as eplt
-# from anAIlysis import signal_analysis as SA
+from anAIlysis import signal_analysis as SA
 from anAIlysis import get_samplerate as GSR
 from anAIlysis import file_handler as fh
 
@@ -89,7 +89,7 @@ for i in range(0, 3):
     model.at[i, 'fs'] = 10e3
     model.at[i, 'length'] = 10 # in seconds
     model.at[i, 'time'] = np.arange(0, model.at[i, 'length'], 1 / model.at[i, 'fs'])
-    model.at[i, 'signal'] = model.at[i, 'amplitude'] * np.sin(2 * np.pi * model.at[i, 'frequency'] * model.at[i, 'time'] + model.at[i, 'theta'])
+    model.at[i, 'signal'] = model.at[i, 'amplitude'] * np.sin(2 * np.pi * model.at[i, 'frequency'] * model.at[i, 'time'] + model.at[i, 'theta']) + model.at[i, 'offset']
     
     model.at[i, 'mu'] = 0
     model.at[i, 'sigma'] = 0.1
@@ -203,3 +203,38 @@ ax.set_ylabel('Amplitude %s' % data_df.columns[0][1])
 # %% Use Signal from PicoScope
 channels = data_df.columns.get_level_values(0).unique()
 amplitude = data_df[channels[0]].values
+
+# %% [markdown]
+## Estimate 3-Phase Sine Model Parameters
+
+
+# %% Estimate and create sine waves from model
+signals = [model.at[i, 'signal_noise'] for i in range(0, 3)]
+fs = model.at[0, 'fs']
+
+est_model = SA.calc_model(signals, fs)
+
+est_signals = {}
+for i in range(0, 3):
+    est_signals[i] = SA.get_signal_from_model(est_model[i], fs, end_time=0.1)
+
+# %% Plot Data
+fig, axs = plt.subplots(nrows=2, sharex=True)
+
+for i in range(0, 3):
+    axs[0].plot(est_signals[i][0:1000])
+
+# ax.plot(model.at[0, 'time'][0:length_plot], model.at[0, 'signal'][0:length_plot])
+axs[0].set_title('Sine wave with estimated parameters')
+axs[0].set_xlabel('Time')
+axs[0].set_ylabel('Amplitude = sin(time)')
+
+for i in range(0, 3):
+    axs[1].plot(model.at[i, 'signal_noise'][0:1000])
+
+# ax.plot(model.at[0, 'time'][0:length_plot], model.at[0, 'signal'][0:length_plot])
+axs[1].set_title('Sine wave with original parameters')
+axs[1].set_xlabel('Time')
+axs[1].set_ylabel('Amplitude = sin(time)')
+
+plt.tight_layout()
