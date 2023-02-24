@@ -45,10 +45,10 @@ logger = logging.getLogger(__name__)
 
 
 # %% Import AI Libs
-from dataparsing.parsing_functions import DataParsingStrategy
-from dataparsing.output_strategies import DataOutputStrategy, convinAIentOutputStrategy
-from dataparsing.parsing_strategy_selector import search_suitable_dataparsing_strategy_for_file
-from dataparsing import parsing_functions
+# from dataparsing.parsing_functions import DataParsingStrategy
+# from dataparsing.output_strategies import DataOutputStrategy, convinAIentOutputStrategy
+# from dataparsing.parsing_strategy_selector import search_suitable_dataparsing_strategy_for_file
+# from dataparsing import parsing_functions
 
 from anAIlysis import ESA
 from anAIlysis import signal_processing as DSP
